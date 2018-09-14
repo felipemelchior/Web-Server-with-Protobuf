@@ -6,21 +6,17 @@ import threading
 import random
 import request_pb2 as request
 import response_pb2 as response
-
-def sendMessage(socket, message):
-	data.message.SerializeToString()
-	size = encode_varint(len(data))
-	socket.sendall(size + data)
+import communication
 
 def createConection(IP, Port):
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sock.connect((IP, int(Port)))
+	# sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	# sock.connect((IP, int(Port)))
 
 	message = request.Request()
 
-	message.command = upper(input("Comando => "))
+	message.command = input("Comando => ")
 	message.url = input("Url => ")
-	message.clientID = random.randint(1000,9999)
+	message.clientId = str(random.randint(1000,9999))
 	message.clientInfo = socket.gethostname()
 	
 	if ((message.command == "GET") or (message.command == "DELETE")):
@@ -28,6 +24,7 @@ def createConection(IP, Port):
 	else:
 		message.content = input("Conteudo da Mensagem => ")
 	
+	message.signature = communication.hmacFromMessage(message)
 
 def help():
 	print("Usage => {0} -h -i <IP> -p <Port>".format(sys.argv[0]))
