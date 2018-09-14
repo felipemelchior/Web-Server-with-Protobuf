@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+message Response {
+	required string status=1;
+	required string protoVersion=2;
+	required string url=3;
+	required string serverInfo=4;
+	required string encoding=5;
+	required string content=6;
+	required string signature=7;
+}

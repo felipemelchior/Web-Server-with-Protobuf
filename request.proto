@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+message Request {
+	required string command=1;
+	required string protoVersion=2;
+	required string url=3;
+	required string clientId=4;
+	required string clientInfo=5;
+	required string encoding=6;
+	required string content=7;
+	required string signature=8;
+}
