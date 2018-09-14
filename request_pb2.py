@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='request.proto',
   package='',
   syntax='proto2',
-  serialized_pb=_b('\n\rrequest.proto\"\x99\x01\n\x07Request\x12\x0f\n\x07\x63ommand\x18\x01 \x02(\t\x12\x14\n\x0cprotoVersion\x18\x02 \x02(\t\x12\x0b\n\x03url\x18\x03 \x02(\t\x12\x10\n\x08\x63lientId\x18\x04 \x02(\t\x12\x12\n\nclientInfo\x18\x05 \x02(\t\x12\x10\n\x08\x65ncoding\x18\x06 \x02(\t\x12\x0f\n\x07\x63ontent\x18\x07 \x02(\t\x12\x11\n\tsignature\x18\x08 \x02(\t')
+  serialized_pb=_b('\n\rrequest.proto\"\xa5\x01\n\x07Request\x12\x0f\n\x07\x63ommand\x18\x01 \x02(\t\x12\x19\n\x0cprotoVersion\x18\x02 \x02(\t:\x03\x31.0\x12\x0b\n\x03url\x18\x03 \x02(\t\x12\x10\n\x08\x63lientId\x18\x04 \x02(\t\x12\x12\n\nclientInfo\x18\x05 \x02(\t\x12\x17\n\x08\x65ncoding\x18\x06 \x02(\t:\x05UTF-8\x12\x0f\n\x07\x63ontent\x18\x07 \x02(\t\x12\x11\n\tsignature\x18\x08 \x02(\t')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -43,7 +43,7 @@ _REQUEST = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='protoVersion', full_name='Request.protoVersion', index=1,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      has_default_value=True, default_value=_b("1.0").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -71,7 +71,7 @@ _REQUEST = _descriptor.Descriptor(
     _descriptor.FieldDescriptor(
       name='encoding', full_name='Request.encoding', index=5,
       number=6, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      has_default_value=True, default_value=_b("UTF-8").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -102,7 +102,7 @@ _REQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=18,
-  serialized_end=171,
+  serialized_end=183,
 )
 
 DESCRIPTOR.message_types_by_name['Request'] = _REQUEST
