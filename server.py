@@ -3,19 +3,42 @@
 import os, sys, getopt
 import socket
 import threading
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(threadName)s:%(message)s')
+
 import request_pb2 as request
 import response_pb2 as response
+import communication
+
+def connected(client, addr):
+	while True:
+		message = request.Request()
+		buffer = communication.recvMessage(client)
+		message.ParseFromString(buffer)
+
+		if message:
+			signature = communication.hmacFromMessage(message)
+			print(signature)
 
 def listenConnection(Port):
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sock.bind(('0.0.0.0', int(Port)))
-	sock.listen(10)
+	try:
+		server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		server.bind(('0.0.0.0', int(Port)))
+		server.listen(10)
 
-	while True:
-		conn, addr = sock.accept()
-		print(addr[0],":",addr[1])
+		logging.info("WebServer running on port {0}".format(Port))
 
-	sock.close()
+		while True:
+			conn, addr = server.accept()
+			threading.Thread(target=connected, args=(conn,addr)).start()
+
+		server.close()
+
+	except (KeyboardInterrupt, SystemExit):
+		logging.info("Finishing execution of WebServer...")
+		pass
+
 
 def help():
 	print("Usage => {0} -h -p <Port>".format(sys.argv[0]))
@@ -28,8 +51,6 @@ def main(argv):
 	except getopt.GetoptError:
 		help()
 		sys.exit(1)
-
-	print(opts)
 
 	for opt, arg in opts:
 		if opt == "-h":
