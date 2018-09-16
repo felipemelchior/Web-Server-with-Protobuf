@@ -14,11 +14,11 @@ def createConection(IP, Port):
 
 	message = request.Request()
 
-	message.command = input("Comando => ")
+	message.command = input("Comando => ").upper()
 	message.protoVersion = "1.0"
 	message.url = input("Url => ")
 	message.clientId = str(random.randint(1000,9999))
-	message.clientInfo = socket.gethostname()
+	message.clientInfo = socket.gethostname().upper()
 	message.encoding = 'utf-8'
 	
 	if ((message.command == "GET") or (message.command == "DELETE")):
@@ -26,9 +26,29 @@ def createConection(IP, Port):
 	else:
 		message.content = input("Conteudo da Mensagem => ")
 	
-	message.signature = communication.hmacFromMessage(message)
+	message.signature = communication.hmacFromRequest(message)
 
 	communication.sendMessage(sock, message)
+
+	responseFromServer = communication.recvMessage(sock, response.Response)
+
+	if response:
+		signature = communication.hmacFromResponse(responseFromServer)
+		if signature == responseFromServer.signature:
+			if message.command == "GET":
+				
+					print(responseFromServer.status)
+					print(responseFromServer.protoVersion)
+					print(responseFromServer.url)
+					print(responseFromServer.serverInfo)
+					print(responseFromServer.encoding)
+					print(responseFromServer.content)
+					print(responseFromServer.signature)
+
+			elif message.command == "POST":
+				pass
+			elif message.command == "DELETE":
+				pass
 
 def help():
 	print("Usage => {0} -h -i <IP> -p <Port>".format(sys.argv[0]))
