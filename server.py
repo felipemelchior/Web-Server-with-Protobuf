@@ -34,11 +34,14 @@ def getMethod(url):
 
 	message = setDefaultServer(message)
 
+
+	print(url)
+
 	if url == '/':
 		archivePath += 'index.html'
 	
 	else:
-		if url[1] != '/':
+		if url[0] != '/':
 			archivePath += "/" + url
 		else:
 			archivePath += url
@@ -113,7 +116,6 @@ def deleteMethod(url, clientId, clientInfo):
 		os.makedirs("contents")
 
 	message = setDefaultServer(message)
-
 	if url == '/':
 		archivePath += 'index.html'
 		
