@@ -17,7 +17,6 @@ def setDefaultServer(message):
 	message.protoVersion = "1.0"
 	message.serverInfo = "WebServer with Protobuf v1.0"
 	message.encoding = "utf-8"
-	message.signature = "utf-8"
 
 	return message
 
@@ -53,11 +52,92 @@ def getMethod(url):
 
 	return message
 
-def postMethod(url):
-	pass
+def postMethod(url, clientId, clientInfo, content):
+	message = response.Response()
+	archivePath = str(Path().absolute())
+	archivePath += '/contents/'
 
-def deleteMethod(url):
-	pass
+	message = setDefaultServer(message)
+
+	if url == '/':
+		archivePath += 'index.html'
+		
+	else:
+		if url[0] == '/':
+			archivePath += str(''.join(url.split('/')))
+		else:
+			archivePath += url
+
+	if os.path.exists(archivePath):
+		logging.info(" POST {0}".format(url))
+		logging.info(" POST in a existent file")
+		message.status = "FAIL - 403"
+	else:
+		logging.info(" POST {0}".format(url))
+		archivePathLock = archivePath + "." + clientId + clientInfo
+		archive = open(archivePath, 'w')
+		archiveLock = open(archivePathLock, 'w')
+
+		archive.write(content)
+		message.status = "OK - 200"
+	message.url = url
+	message.content = content
+	message.signature = communication.hmacFromResponse(message)	
+
+	return message
+		
+
+def deleteMethod(url, clientId, clientInfo):
+	message = response.Response()
+	archivePath = str(Path().absolute())
+	archivePath += '/contents/'
+
+	message = setDefaultServer(message)
+
+	if url == '/':
+		archivePath += 'index.html'
+		
+	else:
+		if url[0] == '/':
+			archivePath += str(''.join(url.split('/')))
+		else:
+			archivePath += url
+
+	if os.path.exists(archivePath):
+		logging.info(" DELETE {0}".format(url))
+		archivePathLock = archivePath + "." + clientId + clientInfo
+		
+		if os.path.exists(archivePathLock):
+				os.remove(archivePath)
+				os.remove(archivePathLock)
+				logging.info(" DELETE Sucessful".format(url))
+				message.status = "OK - 200"
+		else:	
+			logging.info(" DELETE Unsucessful".format(url))
+			message.status = "FAIL - 403"
+		
+	else:
+		logging.info(" DELETE Unsucessful".format(url))
+		message.status = "FAIL - 403"
+
+	message.url = url
+	message.content = ""
+	message.signature = communication.hmacFromResponse(message)	
+
+	return message
+
+def unknownMethod():
+	logging.info(" Unknown command")
+	message = response.Response()
+	message = setDefaultServer(message)
+	message.status = "FAIL - 401"
+	message.url = ""
+	message.content = ""
+	message.signature = communication.hmacFromResponse(message)	
+
+	return message
+
+
 
 def connected(client, addr):
 	while True:
@@ -70,13 +150,18 @@ def connected(client, addr):
 					response = getMethod(message.url)
 					communication.sendMessage(client, response)
 
-				elif message.command == "GET":
-					getMethod(message.url)
-				elif message.command == "GET":
-					getMethod(message.url)
+				elif message.command == "POST":
+					response = postMethod(message.url, message.clientId, message.clientInfo, message.content)
+					communication.sendMessage(client, response)
+				
+				elif message.command == "DELETE":
+					response = deleteMethod(message.url, message.clientId, message.clientInfo)
+					communication.sendMessage(client, response)
 				else:
-					logging.info(" Unknown command")
-	#client.close()		
+					response = unknownMethod()
+					communication.sendMessage(client, response)
+			client.close()	
+			break	
 
 def listenConnection(Port):
 	try:

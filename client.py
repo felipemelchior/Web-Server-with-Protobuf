@@ -8,48 +8,68 @@ import request_pb2 as request
 import response_pb2 as response
 import communication
 
+def setDefaultClient(message):
+	message.protoVersion = "1.0"
+	message.encoding = "utf-8"
+	message.content = ""
+
+	return message
+
 def createConection(IP, Port):
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sock.connect((IP, int(Port)))
+	try:
+		sock.connect((IP, int(Port)))
+		print("Conexão Estabelecida")
+	except ConnectionRefusedError:
+		print("Conexão Recusada")
+		exit(1)
 
 	message = request.Request()
+	message = setDefaultClient(message)
 
 	message.command = input("Comando => ").upper()
-	message.protoVersion = "1.0"
 	message.url = input("Url => ")
 	message.clientId = str(random.randint(1000,9999))
 	message.clientInfo = socket.gethostname().upper()
-	message.encoding = 'utf-8'
 	
 	if ((message.command == "GET") or (message.command == "DELETE")):
 		message.content = "" 
 	else:
-		message.content = input("Conteudo da Mensagem => ")
-	
+		print("Para finalizar a mensagem use Ctrl+X")
+		msg = input("Conteudo da Mensagem => ")
+		while (msg != '\x18') :
+			message.content += msg + "\r\n"
+			msg = input()
+
 	message.signature = communication.hmacFromRequest(message)
 
 	communication.sendMessage(sock, message)
 
 	responseFromServer = communication.recvMessage(sock, response.Response)
 
-	if response:
+	if responseFromServer:
 		signature = communication.hmacFromResponse(responseFromServer)
 		if signature == responseFromServer.signature:
 			if message.command == "GET":
+				print(responseFromServer.status)
+				print(responseFromServer.content)
 				
-					print(responseFromServer.status)
-					print(responseFromServer.protoVersion)
-					print(responseFromServer.url)
-					print(responseFromServer.serverInfo)
-					print(responseFromServer.encoding)
-					print(responseFromServer.content)
-					print(responseFromServer.signature)
-
 			elif message.command == "POST":
-				pass
-			elif message.command == "DELETE":
-				pass
+				print(responseFromServer.status)
+				if("OK" in responseFromServer.status):
+					print("Arquivo {0} criado com sucesso!".format(responseFromServer.url))
+				else:
+					print("Falha ao criar o arquivo!")
 
+			elif message.command == "DELETE":
+				print(responseFromServer.status)
+				if("OK" in responseFromServer.status):
+					print("Arquivo {0} deletado com sucesso!".format(responseFromServer.url))
+				else:
+					print("Falha ao deletar o arquivo!")
+			else:
+				print(responseFromServer.status)
+				print("Comando Desconhecido")
 def help():
 	print("Usage => {0} -h -i <IP> -p <Port>".format(sys.argv[0]))
 
