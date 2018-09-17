@@ -9,9 +9,14 @@ import response_pb2 as response
 import communication
 
 def setDefaultClient(message):
+	message.command = ""
 	message.protoVersion = "1.0"
+	message.url = ""
+	message.clientId = ""
+	message.clientInfo = ""
 	message.encoding = "utf-8"
 	message.content = ""
+	message.signature = ""
 
 	return message
 
@@ -50,35 +55,40 @@ def createConection(IP, Port):
 	if responseFromServer:
 		signature = communication.hmacFromResponse(responseFromServer)
 		if signature == responseFromServer.signature:
+			print("\n######## RESPOSTA DO SERVIDOR ########")
 			if message.command == "GET":
-				print(responseFromServer.status)
-				print(responseFromServer.content)
-				
+				print("STATUS:", responseFromServer.status)
+				if("OK" in responseFromServer.status):
+					print("CONTEUDO:")
+					print(responseFromServer.content)
+				else:
+					print("Arquivo não encontrado")
+
 			elif message.command == "POST":
-				print(responseFromServer.status)
+				print("STATUS:", responseFromServer.status)
 				if("OK" in responseFromServer.status):
 					print("Arquivo {0} criado com sucesso!".format(responseFromServer.url))
 				else:
 					print("Falha ao criar o arquivo!")
 
 			elif message.command == "DELETE":
-				print(responseFromServer.status)
+				print("STATUS:", responseFromServer.status)
 				if("OK" in responseFromServer.status):
 					print("Arquivo {0} deletado com sucesso!".format(responseFromServer.url))
 				else:
 					print("Falha ao deletar o arquivo!")
 			else:
-				print(responseFromServer.status)
+				print("STATUS:", responseFromServer.status)
 				print("Comando Desconhecido")
 def help():
-	print("Usage => {0} -h -i <IP> -p <Port>".format(sys.argv[0]))
+	print("Usage => {0} -h -i/--ip <IP_Server> -p/--port <Port_Server>".format(sys.argv[0]))
 
 def main(argv):
 	IP = ''
 	Port= 0
 
 	try:
-		opts, args = getopt.getopt(argv, "hi:p:",["IP=", "Port="])
+		opts, args = getopt.getopt(argv, "hi:p:",["ip=", "port="])
 	except getopt.GetoptError:
 		help()
 		sys.exit(1)
@@ -87,9 +97,9 @@ def main(argv):
 		if opt == "-h":
 			help()
 			sys.exit()
-		elif opt in ("-i", "--IP"):
+		elif opt in ("-i", "--ip"):
 			IP = arg
-		elif opt in ("-p", "--Port"):
+		elif opt in ("-p", "--port"):
 			Port = arg
 
 	if ((IP == '') or (Port == 0)):

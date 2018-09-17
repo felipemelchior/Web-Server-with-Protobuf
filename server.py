@@ -14,9 +14,13 @@ import communication
 from pathlib import Path
 
 def setDefaultServer(message):
+	message.status = ""
 	message.protoVersion = "1.0"
+	message.url = ""
 	message.serverInfo = "WebServer with Protobuf v1.0"
 	message.encoding = "utf-8"
+	message.content = ""
+	message.signature = ""
 
 	return message
 
@@ -24,6 +28,9 @@ def getMethod(url):
 	message = response.Response()
 	archivePath = str(Path().absolute())
 	archivePath += '/contents/'
+
+	if not os.path.exists(archivePath):
+		os.makedirs("contents")
 
 	message = setDefaultServer(message)
 
@@ -56,6 +63,9 @@ def postMethod(url, clientId, clientInfo, content):
 	message = response.Response()
 	archivePath = str(Path().absolute())
 	archivePath += '/contents/'
+
+	if not os.path.exists(archivePath):
+		os.makedirs("contents")
 
 	message = setDefaultServer(message)
 
@@ -91,6 +101,9 @@ def deleteMethod(url, clientId, clientInfo):
 	message = response.Response()
 	archivePath = str(Path().absolute())
 	archivePath += '/contents/'
+
+	if not os.path.exists(archivePath):
+		os.makedirs("contents")
 
 	message = setDefaultServer(message)
 
@@ -131,13 +144,9 @@ def unknownMethod():
 	message = response.Response()
 	message = setDefaultServer(message)
 	message.status = "FAIL - 401"
-	message.url = ""
-	message.content = ""
 	message.signature = communication.hmacFromResponse(message)	
 
 	return message
-
-
 
 def connected(client, addr):
 	while True:
@@ -163,11 +172,14 @@ def connected(client, addr):
 			client.close()	
 			break	
 
-def listenConnection(Port):
+def listenConnection(Ip, Port):
 	try:
 		server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		server.bind(('0.0.0.0', int(Port)))
-		server.listen(10)
+		try:
+			server.bind((Ip, int(Port)))
+			server.listen(10)
+		except:
+			logging.info(" Error on start server")
 
 		logging.info(" WebServer running on port {0}".format(Port))
 
@@ -183,13 +195,14 @@ def listenConnection(Port):
 
 
 def help():
-	print("Usage => {0} -h -p <Port>".format(sys.argv[0]))
+	print("Usage => {0} -h -i/--ip <IP> -p/--port <Port>".format(sys.argv[0]))
 
 def main(argv):
+	Ip = '0.0.0.0'
 	Port= 0
 
 	try:
-		opts, args = getopt.getopt(argv, "hp:",["Port="])
+		opts, args = getopt.getopt(argv, "hi:p:",["ip=","port="])
 	except getopt.GetoptError:
 		help()
 		sys.exit(1)
@@ -198,14 +211,16 @@ def main(argv):
 		if opt == "-h":
 			help()
 			sys.exit()
-		elif opt in ("-p", "--Port"):
+		elif opt in ("-i", "--ip"):
+			Ip = arg
+		elif opt in ("-p", "--port"):
 			Port = arg
 
 	if Port == 0:
 		help()
 		sys.exit(1)
 
-	listenConnection(Port)
+	listenConnection(Ip, Port)
 
 if __name__ == '__main__':
 	main(sys.argv[1:])
