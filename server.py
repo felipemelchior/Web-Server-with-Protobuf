@@ -92,6 +92,7 @@ def postMethod(url, clientId, clientInfo, content):
 		archiveLock = open(archivePathLock, 'w')
 
 		archive.write(content)
+		logging.info(" POST Sucessful")
 		message.status = "OK - 200"
 	message.url = url
 	message.content = content
