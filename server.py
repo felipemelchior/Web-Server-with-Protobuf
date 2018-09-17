@@ -36,7 +36,7 @@ def getMethod(url):
 
 	if url == '/':
 		archivePath += 'index.html'
-		
+	
 	else:
 		if url[1] != '/':
 			archivePath += "/" + url
@@ -45,11 +45,13 @@ def getMethod(url):
 
 	message.url = url
 
+	logging.info(" GET {0}".format(url))
+
 	try:
 		archive = open(archivePath, 'r')
 		message.content += archive.read()
+		logging.info(" GET Sucessful")
 		message.status = "OK - 200"
-		logging.info(" GET {0}".format(url))
 
 	except FileNotFoundError:
 		message.status = "FAIL - 404"
@@ -78,8 +80,9 @@ def postMethod(url, clientId, clientInfo, content):
 		else:
 			archivePath += url
 
+	logging.info(" POST {0}".format(url))
+
 	if os.path.exists(archivePath):
-		logging.info(" POST {0}".format(url))
 		logging.info(" POST in a existent file")
 		message.status = "FAIL - 403"
 	else:
@@ -116,8 +119,9 @@ def deleteMethod(url, clientId, clientInfo):
 		else:
 			archivePath += url
 
+	logging.info(" DELETE {0}".format(url))
+
 	if os.path.exists(archivePath):
-		logging.info(" DELETE {0}".format(url))
 		archivePathLock = archivePath + "." + clientId + clientInfo
 		
 		if os.path.exists(archivePathLock):
