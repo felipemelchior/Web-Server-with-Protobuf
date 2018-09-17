@@ -34,9 +34,6 @@ def getMethod(url):
 
 	message = setDefaultServer(message)
 
-
-	print(url)
-
 	if url == '/':
 		archivePath += 'index.html'
 	
@@ -89,7 +86,6 @@ def postMethod(url, clientId, clientInfo, content):
 		logging.info(" POST in a existent file")
 		message.status = "FAIL - 403"
 	else:
-		logging.info(" POST {0}".format(url))
 		archivePathLock = archivePath + "." + clientId + clientInfo
 		archive = open(archivePath, 'w')
 		archiveLock = open(archivePathLock, 'w')
