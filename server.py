@@ -52,7 +52,7 @@ def getMethod(url):
 		message.content += archive.read()
 		logging.info(" GET Sucessful")
 		message.status = "OK - 200"
-
+		archive.close()
 	except FileNotFoundError:
 		message.status = "FAIL - 404"
 		logging.info(" Archive not found")
@@ -94,6 +94,9 @@ def postMethod(url, clientId, clientInfo, content):
 		archive.write(content)
 		logging.info(" POST Sucessful")
 		message.status = "OK - 200"
+
+		archive.close()
+		archiveLock.close()
 	message.url = url
 	message.content = content
 	message.signature = communication.hmacFromResponse(message)	
@@ -159,6 +162,7 @@ def connected(client, addr):
 
 		if message:
 			signature = communication.hmacFromRequest(message)
+			
 			if signature == message.signature:
 				if message.command == "GET":
 					response = getMethod(message.url)
@@ -174,8 +178,7 @@ def connected(client, addr):
 				else:
 					response = unknownMethod()
 					communication.sendMessage(client, response)
-			client.close()	
-			break	
+	client.close()		
 
 def listenConnection(Ip, Port):
 	try:

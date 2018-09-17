@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import socket
-from google.protobuf.internal.encoder import _VarintEncoder
-from google.protobuf.internal.decoder import _DecodeVarint
+import hmac
+try:
+    from google.protobuf.internal.encoder import _VarintEncoder
+    from google.protobuf.internal.decoder import _DecodeVarint
+except:
+    print("Falha ao importar as bibliotecas\nTente: sudo pip3 google-cloud-storage")
 from hashlib import sha256
 
 def encodeVarint(data):
@@ -35,21 +39,21 @@ def recvMessage(socket, protoType):
 
     return message
 
-def hmac(body):
-    key = "key"
-    trans_5C = "".join(chr(x ^ 0x5c) for x in range(256))
-    trans_36 = "".join(chr(x ^ 0x36) for x in range(256))
-    blocksize = sha256().block_size
+# def hmac(body):
+#     key = "key"
+#     trans_5C = "".join(chr(x ^ 0x5c) for x in range(256))
+#     trans_36 = "".join(chr(x ^ 0x36) for x in range(256))
+#     blocksize = sha256().block_size
 
-    if(len(key) > blocksize):
-        key = sha256(key).digest()
-    key += chr(0) * (blocksize - len(key))
-    o_key_pad = key.translate(trans_5C).encode('utf-8')
-    i_key_pad = key.translate(trans_36).encode('utf-8')
+#     if(len(key) > blocksize):
+#         key = sha256(key).digest()
+#     key += chr(0) * (blocksize - len(key))
+#     o_key_pad = key.translate(trans_5C).encode('utf-8')
+#     i_key_pad = key.translate(trans_36).encode('utf-8')
 
-    signature = sha256(o_key_pad + sha256(i_key_pad + body).digest()).hexdigest()
+#     signature = sha256(o_key_pad + sha256(i_key_pad + body).digest()).hexdigest()
 
-    return str(signature)
+#     return str(signature)
 
 def hmacFromRequest(message):
     body = message.command
@@ -61,7 +65,9 @@ def hmacFromRequest(message):
     body += message.content
     body = body.encode('utf-8')
 
-    return hmac(body)
+    signature = hmac.new(b'webserver_privateKey', body).hexdigest()
+    
+    return str(signature)
 
 def hmacFromResponse(message):
     body = message.status
@@ -72,4 +78,6 @@ def hmacFromResponse(message):
     body += message.content
     body = body.encode('utf-8')
 
-    return hmac(body)
+    signature = hmac.new(b'webserver_privateKey', body).hexdigest()
+    
+    return str(signature)
