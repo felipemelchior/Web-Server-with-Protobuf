@@ -17,6 +17,10 @@ Dependências: <br>
 $ python3
 ```
 
+```
+Módulos Google - pip3 install google-cloud-storage
+```
+
 <br>
 
 Inicialmente, inicie o código do servidor: <br>
