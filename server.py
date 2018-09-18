@@ -14,6 +14,14 @@ import communication
 from pathlib import Path
 
 def setDefaultServer(message):
+	'''
+	Define os valores default da estrutura do protobuf
+	Para evitar que faltem parametros no protobuf na hora de enviar ao cliente
+
+	:param message: estrutura protobuf
+	:return: estrutura protobuf com os valores definidos
+	'''
+	
 	message.status = ""
 	message.protoVersion = "1.0"
 	message.url = ""
@@ -25,6 +33,13 @@ def setDefaultServer(message):
 	return message
 
 def getMethod(url):
+	'''
+	Função que popula o protobuf enviando como conteudo, o arquivo que o cliente quer
+
+	:param url: Url do arquivo desejado (ex: "index.html", "teste.txt")
+	:return: Protobuf já pronto para o envio
+	'''
+
 	message = response.Response()
 	archivePath = str(Path().absolute())
 	archivePath += '/contents/'
@@ -62,6 +77,19 @@ def getMethod(url):
 	return message
 
 def postMethod(url, clientId, clientInfo, content):
+	'''
+	Função que cria arquivos no servidor
+
+	Cria um arquivo com o conteudo recebido do cliente
+	Para manter a autoridade dos arquivos, também é criado um arquivo, com mesmo nome,
+	porém, concatenado com a identificação e informação do cliente.
+
+	:param url: Url onde o arquivo sera salvo
+	:param clientId: Identificação do cliente
+	:param clientInfo: Informação sobre o cliente, neste caso o hostname
+	:return: Estrutura Protobuf já pronta para o envio
+	'''
+
 	message = response.Response()
 	archivePath = str(Path().absolute())
 	archivePath += '/contents/'
@@ -102,8 +130,20 @@ def postMethod(url, clientId, clientInfo, content):
 
 	return message
 		
-
 def deleteMethod(url, clientId, clientInfo):
+	'''
+	Função de remoção de arquivos
+
+	Remove arquivos localizados no servidor
+	Para segurança dos arquivos, faz o teste antes de remover
+	O teste basicamente é uma busca pelo arquivo de lock (url + . + clientId + clientInfo)
+	
+	:param url: Url do arquivo que será removido
+	:param clientId: Identificação do cliente
+	:param clientInfo: Informação do cliente, neste caso é o hostname
+	:return: Estrutura protobuf de resposta já pronta para envio
+	'''
+
 	message = response.Response()
 	archivePath = str(Path().absolute())
 	archivePath += '/contents/'
@@ -146,6 +186,11 @@ def deleteMethod(url, clientId, clientInfo):
 	return message
 
 def unknownMethod():
+	'''
+	Função que é chamada quando o comando especificado pelo cliente não é conhecido
+	Ex: "gets", "trace"
+	'''
+
 	logging.info(" Unknown command")
 	message = response.Response()
 	message = setDefaultServer(message)
@@ -155,6 +200,15 @@ def unknownMethod():
 	return message
 
 def connected(client, addr):
+	'''
+	Função que recebe a conexão
+
+	Trata o protobuf recebido com base nos valores dele (ex: "GET /")
+
+	:param client: Socket de conexão do cliente
+	:param addr: Endereço IP do cliente
+	'''
+
 	while True:
 		message = communication.recvMessage(client, request.Request)
 
@@ -179,6 +233,16 @@ def connected(client, addr):
 	client.close()		
 
 def listenConnection(Ip, Port):
+	'''
+	Coloca o servidor para rodar, de fato
+
+	Após, fica escutando a porta e quando chegar alguma conexão, cria um thread para o cliente
+	e trata envia para a função que irá tratar a requisição
+
+	:param Ip: Endereço Ip que o servidor irá rodar
+	:param Port: Porta em que o servidor irá rodar
+	'''
+
 	try:
 		server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		try:
@@ -201,10 +265,30 @@ def listenConnection(Ip, Port):
 
 
 def help():
-	print("Usage => {0} -h -i/--ip <IP> -p/--port <Port>".format(sys.argv[0]))
+	'''
+	Exibe a ajuda
+
+	No servidor, por padrão o parametro "-i/--ip" equivale ao localhost (127.0.0.1)
+	'''
+	
+	print("WebServer with Protobuf - Server\n")
+	print("Métodos disponíveis:\n-> GET - Faz o pedido de um arquivo a um servidor")
+	print("-> POST - Envia um arquivo para o servidor")
+	print("-> DELETE - Exclui um arquivo do servidor, apenas o dono do arquivo consegue deletar este arquivo")
+	print("Uso => python3 {0} -h -i/--ip <IP_Server> -p/--port <Port_Server>".format(sys.argv[0]))
+	print("\n\nParametros\n-h\t\tExibe a ajuda")
+	print("-i/--ip\t\tParametro que define o IP do servidor")
+	print("-p/--port\tParametro que define a Porta em o que o servidor está rodando")
 
 def main(argv):
-	Ip = '0.0.0.0'
+	'''
+	Função principal que define os parametros do programa e também faz a chamada
+	da função que colocará o servidor para funcionar
+
+	:param argv: lista de parametros
+	'''
+
+	Ip = '127.0.0.1'
 	Port= 0
 
 	try:
@@ -229,5 +313,8 @@ def main(argv):
 	listenConnection(Ip, Port)
 
 if __name__ == '__main__':
-	main(sys.argv[1:])
+	'''
+	Inicio do programa, apenas faz a chamada da função principal
+	'''
 
+	main(sys.argv[1:])
