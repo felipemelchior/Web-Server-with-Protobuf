@@ -39,7 +39,8 @@ $ python3 client.py -i <IP_Server> -p <Porta_Server>
 
 Após isso, os códigos irão começar a execução e através do código de cliente será possível realizar as requisições para que então, o código de servidor analise a requisição e a execute.
 
-## Desenvolvedor
+## Desenvolvedores
 
 * Felipe Homrich Melchior - UNIPAMPA - [Perfil GitHub](https://github.com/homdreen) <br>
-* Lucas Antunes de Almeida - <lucasalmeida053@gmail.com> - [Perfil GitHub](https://github.com/LucasAntunesdeAlmeida) <br>
+* Lucas Antunes de Almeida - UNIPAMPA - [Perfil 
+GitHub](https://github.com/LucasAntunesdeAlmeida) <br>
