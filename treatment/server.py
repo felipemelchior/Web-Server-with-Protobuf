@@ -44,9 +44,9 @@ def getMethod(url):
 
 	message = setDefaultServer(message)
 
-	if url == '/':
+	if url == '/' or len(url) == 0:
 		archivePath += 'index.html'
-
+        
 	else:
 		if url[0] != '/':
 			archivePath += "/" + url
