@@ -7,6 +7,7 @@ import random
 import request_pb2 as request
 import response_pb2 as response
 import communication
+from treatment.ccrypt import key_exchange
 from treatment.client import getRespose, sendMessage
 
 def createConection(IP, Port):
@@ -31,6 +32,8 @@ def createConection(IP, Port):
 
 	data = input("Para finalizar o programa, utilize 'SAIR'\nComando => ").upper()
 	clientId = str(random.randint(1000,9999))
+	key=key_exchange(sock)
+
 	while(data != "SAIR"):
 
 		message = sendMessage(data, communication, clientId, sock)

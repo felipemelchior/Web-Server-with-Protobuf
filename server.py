@@ -12,6 +12,7 @@ import request_pb2 as request
 import response_pb2 as response
 import communication
 from pathlib import Path
+from treatment.scrypt import key_exchange
 from treatment.server import getMethod, postMethod, deleteMethod, unknownMethod
 
 
@@ -25,6 +26,8 @@ def connected(client, addr):
 	:param client: Socket de conexão do cliente
 	:param addr: Endereço IP do cliente
 	'''
+
+	key=key_exchange(client)
 
 	while True:
 		message = communication.recvMessage(client, request.Request)
