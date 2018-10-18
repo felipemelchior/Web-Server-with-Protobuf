@@ -37,16 +37,13 @@ def sendMessage(data, communication, clientId, sock):
     if ((message.command == "GET") or (message.command == "DELETE")):
         message.content = ""
     else:
-        if(os.path.exists(message.url)):
+        try:
             archive = open(message.url, 'r')
             message.content += archive.read()
             archive.close()
-        else:
-            print("Para finalizar a mensagem use Ctrl+X")
-            msg = input("Conteudo da Mensagem => ")
-            while (msg != '\x18') :
-                message.content += msg + "\r\n"
-                msg = input()
+        except:
+            print("Arquivo não localizado!")
+            exit(1)
 
     message.signature = communication.hmacFromRequest(message)
 
