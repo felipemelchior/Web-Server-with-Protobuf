@@ -32,7 +32,7 @@ def recvMessage(socket, protoType):
             break
         except IndexError:
             pass
-    
+
     data = socket.recv(size)
     message = protoType()
     message.ParseFromString(data)
@@ -55,7 +55,7 @@ def recvMessage(socket, protoType):
 
 #     return str(signature)
 
-def hmacFromRequest(message):
+def hmacFromRequest(message, key):
     body = message.command
     body += message.protoVersion
     body += message.url
@@ -65,8 +65,8 @@ def hmacFromRequest(message):
     body += message.content
     body = body.encode('utf-8')
 
-    signature = hmac.new(b'webserver_privateKey', body).hexdigest()
-    
+    signature = hmac.new(key.to_bytes(16, "big"), body).hexdigest()
+
     return str(signature)
 
 def hmacFromResponse(message):
@@ -79,5 +79,5 @@ def hmacFromResponse(message):
     body = body.encode('utf-8')
 
     signature = hmac.new(b'webserver_privateKey', body).hexdigest()
-    
+
     return str(signature)

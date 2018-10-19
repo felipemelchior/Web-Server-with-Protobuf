@@ -33,7 +33,7 @@ def connected(client, addr):
 		message = communication.recvMessage(client, request.Request)
 
 		if message:
-			signature = communication.hmacFromRequest(message)
+			signature = communication.hmacFromRequest(message, key)
 
 			if signature == message.signature:
 				if message.command == "GET":

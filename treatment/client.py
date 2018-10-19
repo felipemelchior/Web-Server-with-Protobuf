@@ -25,7 +25,7 @@ def setDefaultClient(message):
 
 	return message
 
-def sendMessage(data, communication, clientId, sock):
+def sendMessage(data, communication, clientId, sock, key):
     message = request.Request()
     message = setDefaultClient(message)
 
@@ -47,7 +47,7 @@ def sendMessage(data, communication, clientId, sock):
     else:
         pass
 
-    message.signature = communication.hmacFromRequest(message)
+    message.signature = communication.hmacFromRequest(message, key)
 
     communication.sendMessage(sock, message)
     return message
@@ -71,7 +71,7 @@ def getRespose(communication, message, sock):
                     else:
                         archive = open(responseFromServer.url, 'w+')
                         archive.write(responseFromServer.content)
-        
+
                 else:
                     print("Arquivo não encontrado")
 

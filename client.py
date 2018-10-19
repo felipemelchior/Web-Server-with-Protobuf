@@ -39,7 +39,7 @@ def createConection(IP, Port):
 	key=key_exchange(sock)
 
 	while(data != "SAIR"):
-		message = sendMessage(data, communication, clientId, sock)
+		message = sendMessage(data, communication, clientId, sock, key)
 		getRespose(communication, message, sock)
 
 		print("\n######## NOVA REQUISIÇÃO ########")
