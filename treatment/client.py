@@ -65,7 +65,7 @@ def getRespose(communication, message, sock):
                     print("CONTEUDO:")
                     print(responseFromServer.content)
 
-                    if(responseFromServer.url == "/"):
+                    if(responseFromServer.url in ["/", ""]):
                         archive = open("index.html", 'w+')
                         archive.write(responseFromServer.content)
                     else:
