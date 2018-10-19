@@ -10,6 +10,9 @@ import communication
 from treatment.ccrypt import key_exchange
 from treatment.client import getRespose, sendMessage
 
+def helpMessage():
+	print("\nComandos disponíveis:\n\n\tGET - Recebe um arquivo do Serivdor\n\tPOST - Envia um arquivo existente para o Servidor\n\tDELETE - Exclui um arquivo de sua autoria do servidor\n\nPara finalizar o programa, utilize 'SAIR'")
+
 def createConection(IP, Port):
 	'''
 	Cria a conexao com o servidor e popula o protobuf de acordo com o cliente atual
@@ -30,7 +33,8 @@ def createConection(IP, Port):
 		print("Conexão Recusada")
 		exit(1)
 
-	data = input("Para finalizar o programa, utilize 'SAIR'\nComando => ").upper()
+	helpMessage()
+	data = input("\nComando => ").upper()
 	clientId = str(random.randint(1000,9999))
 	key=key_exchange(sock)
 
@@ -40,7 +44,8 @@ def createConection(IP, Port):
 		getRespose(communication, message, sock)
 
 		print("\n######## NOVA REQUISIÇÃO ########")
-		data = input("Para finalizar o programa, utilize 'SAIR'\nComando => ").upper()
+		helpMessage()
+		data = input("\nComando => ").upper()
 
 def help():
 	'''

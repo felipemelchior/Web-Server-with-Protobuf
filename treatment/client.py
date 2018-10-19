@@ -36,7 +36,7 @@ def sendMessage(data, communication, clientId, sock):
 
     if ((message.command == "GET") or (message.command == "DELETE")):
         message.content = ""
-    else:
+    elif(message.command == "POST"):
         try:
             archive = open(message.url, 'r')
             message.content += archive.read()
@@ -44,6 +44,8 @@ def sendMessage(data, communication, clientId, sock):
         except:
             print("Arquivo não localizado!")
             exit(1)
+    else:
+        pass
 
     message.signature = communication.hmacFromRequest(message)
 
