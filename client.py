@@ -11,7 +11,7 @@ from treatment.ccrypt import key_exchange
 from treatment.client import getRespose, sendMessage
 
 def helpMessage():
-	print("\nComandos disponíveis:\n\n\tGET - Recebe um arquivo do Serivdor\n\tPOST - Envia um arquivo existente para o Servidor\n\tDELETE - Exclui um arquivo de sua autoria do servidor\n\nPara finalizar o programa, utilize 'SAIR'")
+	print("\nComandos disponíveis:\n\n\tGET - Recebe um arquivo do Servidor\n\tPOST - Envia um arquivo existente para o Servidor\n\tDELETE - Exclui um arquivo de sua autoria do servidor\n\nPara finalizar o programa, utilize 'SAIR'")
 
 def createConection(IP, Port):
 	'''
@@ -39,7 +39,6 @@ def createConection(IP, Port):
 	key=key_exchange(sock)
 
 	while(data != "SAIR"):
-
 		message = sendMessage(data, communication, clientId, sock)
 		getRespose(communication, message, sock)
 

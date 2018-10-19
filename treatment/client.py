@@ -64,6 +64,14 @@ def getRespose(communication, message, sock):
                 if("OK" in responseFromServer.status):
                     print("CONTEUDO:")
                     print(responseFromServer.content)
+
+                    if(responseFromServer.url == "/"):
+                        archive = open("index.html", 'w+')
+                        archive.write(responseFromServer.content)
+                    else:
+                        archive = open(responseFromServer.url, 'w+')
+                        archive.write(responseFromServer.content)
+        
                 else:
                     print("Arquivo não encontrado")
 
