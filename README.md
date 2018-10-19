@@ -44,3 +44,4 @@ Após isso, os códigos irão começar a execução e através do código de cli
 * Felipe Homrich Melchior - UNIPAMPA - [Perfil GitHub](https://github.com/homdreen) <br>
 * Lucas Antunes de Almeida - UNIPAMPA - [Perfil 
 GitHub](https://github.com/LucasAntunesdeAlmeida) <br>
+* Wesley Ferreira - UNIPAMPA - [Perfil GitHub](https://github.com/wesferr) <br>
