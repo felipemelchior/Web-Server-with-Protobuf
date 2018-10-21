@@ -19,6 +19,8 @@ $ python3
 
 ```
 Módulos Google - pip3 install google-cloud-storage
+
+Módulos de criptografia - pip3 install pycrypto
 ```
 
 <br>
@@ -42,6 +44,6 @@ Após isso, os códigos irão começar a execução e através do código de cli
 ## Desenvolvedores
 
 * Felipe Homrich Melchior - UNIPAMPA - [Perfil GitHub](https://github.com/homdreen) <br>
-* Lucas Antunes de Almeida - UNIPAMPA - [Perfil 
+* Lucas Antunes de Almeida - UNIPAMPA - [Perfil
 GitHub](https://github.com/LucasAntunesdeAlmeida) <br>
 * Wesley Ferreira - UNIPAMPA - [Perfil GitHub](https://github.com/wesferr) <br>
