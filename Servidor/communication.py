@@ -39,22 +39,6 @@ def recvMessage(socket, protoType):
 
     return message
 
-# def hmac(body):
-#     key = "key"
-#     trans_5C = "".join(chr(x ^ 0x5c) for x in range(256))
-#     trans_36 = "".join(chr(x ^ 0x36) for x in range(256))
-#     blocksize = sha256().block_size
-
-#     if(len(key) > blocksize):
-#         key = sha256(key).digest()
-#     key += chr(0) * (blocksize - len(key))
-#     o_key_pad = key.translate(trans_5C).encode('utf-8')
-#     i_key_pad = key.translate(trans_36).encode('utf-8')
-
-#     signature = sha256(o_key_pad + sha256(i_key_pad + body).digest()).hexdigest()
-
-#     return str(signature)
-
 def hmacFromRequest(message, key):
     body = message.command
     body += message.protoVersion

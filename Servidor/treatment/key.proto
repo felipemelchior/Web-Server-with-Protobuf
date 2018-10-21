@@ -1,8 +1,0 @@
-syntax = "proto2";
-message Prime_key{
-    required fixed64 base = 1;
-    required fixed64 public = 2;
-}
-message Public_key{
-  required fixed64 key = 1;
-}

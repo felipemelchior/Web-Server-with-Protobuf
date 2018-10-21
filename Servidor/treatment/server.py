@@ -59,9 +59,11 @@ def getMethod(url, key):
 
 	try:
 		archive = open(archivePath, 'r')
+		nameFile = archive.name
 		message.content += archive.read()
 		logging.info(" GET Sucessful")
 		message.status = "OK - 200"
+		message.url = nameFile
 		archive.close()
 	except FileNotFoundError:
 		message.status = "FAIL - 404"
