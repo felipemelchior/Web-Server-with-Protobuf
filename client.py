@@ -40,7 +40,7 @@ def createConection(IP, Port):
 
 	while(data != "SAIR"):
 		message = sendMessage(data, communication, clientId, sock, key)
-		getRespose(communication, message, sock)
+		getRespose(communication, message, sock, key)
 
 		print("\n######## NOVA REQUISIÇÃO ########")
 		helpMessage()

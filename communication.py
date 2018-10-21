@@ -69,7 +69,7 @@ def hmacFromRequest(message, key):
 
     return str(signature)
 
-def hmacFromResponse(message):
+def hmacFromResponse(message, key):
     body = message.status
     body += message.protoVersion
     body += message.url
@@ -78,6 +78,6 @@ def hmacFromResponse(message):
     body += message.content
     body = body.encode('utf-8')
 
-    signature = hmac.new(b'webserver_privateKey', body).hexdigest()
+    signature = hmac.new(key.to_bytes(16, "big"), body).hexdigest()
 
     return str(signature)

@@ -37,18 +37,18 @@ def connected(client, addr):
 
 			if signature == message.signature:
 				if message.command == "GET":
-					response = getMethod(message.url)
+					response = getMethod(message.url, key)
 					communication.sendMessage(client, response)
 
 				elif message.command == "POST":
-					response = postMethod(message.url, message.clientId, message.clientInfo, message.content)
+					response = postMethod(message.url, message.clientId, message.clientInfo, message.content, key)
 					communication.sendMessage(client, response)
 
 				elif message.command == "DELETE":
-					response = deleteMethod(message.url, message.clientId, message.clientInfo)
+					response = deleteMethod(message.url, message.clientId, message.clientInfo, key)
 					communication.sendMessage(client, response)
 				else:
-					response = unknownMethod()
+					response = unknownMethod(key)
 					communication.sendMessage(client, response)
 	client.close()
 

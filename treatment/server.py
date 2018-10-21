@@ -27,7 +27,7 @@ def setDefaultServer(message):
 
 	return message
 
-def getMethod(url):
+def getMethod(url, key):
 	'''
 	Função que popula o protobuf enviando como conteudo, o arquivo que o cliente quer
 
@@ -67,11 +67,11 @@ def getMethod(url):
 		message.status = "FAIL - 404"
 		logging.info(" Archive not found")
 
-	message.signature = communication.hmacFromResponse(message)
+	message.signature = communication.hmacFromResponse(message, key)
 
 	return message
 
-def postMethod(url, clientId, clientInfo, content):
+def postMethod(url, clientId, clientInfo, content, key):
 	'''
 	Função que cria arquivos no servidor
 
@@ -121,11 +121,11 @@ def postMethod(url, clientId, clientInfo, content):
 		archiveLock.close()
 	message.url = url
 	message.content = content
-	message.signature = communication.hmacFromResponse(message)
+	message.signature = communication.hmacFromResponse(message, key)
 
 	return message
 
-def deleteMethod(url, clientId, clientInfo):
+def deleteMethod(url, clientId, clientInfo, key):
 	'''
 	Função de remoção de arquivos
 
@@ -176,11 +176,11 @@ def deleteMethod(url, clientId, clientInfo):
 
 	message.url = url
 	message.content = ""
-	message.signature = communication.hmacFromResponse(message)
+	message.signature = communication.hmacFromResponse(message, key)
 
 	return message
 
-def unknownMethod():
+def unknownMethod(key):
 	'''
 	Função que é chamada quando o comando especificado pelo cliente não é conhecido
 	Ex: "gets", "trace"
@@ -190,6 +190,6 @@ def unknownMethod():
 	message = response.Response()
 	message = setDefaultServer(message)
 	message.status = "FAIL - 401"
-	message.signature = communication.hmacFromResponse(message)
+	message.signature = communication.hmacFromResponse(message, key)
 
 	return message

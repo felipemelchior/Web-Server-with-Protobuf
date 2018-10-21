@@ -52,11 +52,11 @@ def sendMessage(data, communication, clientId, sock, key):
     communication.sendMessage(sock, message)
     return message
 
-def getRespose(communication, message, sock):
+def getRespose(communication, message, sock,key):
     responseFromServer = communication.recvMessage(sock, response.Response)
 
     if responseFromServer:
-        signature = communication.hmacFromResponse(responseFromServer)
+        signature = communication.hmacFromResponse(responseFromServer, key)
         if signature == responseFromServer.signature:
             print("\n######## RESPOSTA DO SERVIDOR ########")
             if message.command == "GET":
