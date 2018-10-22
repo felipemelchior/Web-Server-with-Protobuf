@@ -27,7 +27,7 @@ def setDefaultServer(message):
 
 	return message
 
-def getMethod(url, key):
+def getMethod(url, clientId, clientInfo, key):
 	'''
 	Função que popula o protobuf enviando como conteudo, o arquivo que o cliente quer
 
@@ -48,6 +48,7 @@ def getMethod(url, key):
 		archivePath += 'index.html'
 
 	else:
+
 		if url[0] != '/':
 			archivePath += "/" + url
 		else:
@@ -96,6 +97,12 @@ def postMethod(url, clientId, clientInfo, content, key):
 
 	message = setDefaultServer(message)
 
+	archivePath += clientId + clientInfo + "/"
+
+
+	if not os.path.exists(archivePath):
+		os.makedirs("contents/" + clientId + clientInfo)
+
 	if url == '/':
 		archivePath += 'index.html'
 
@@ -111,16 +118,13 @@ def postMethod(url, clientId, clientInfo, content, key):
 		logging.info(" POST in a existent file")
 		message.status = "FAIL - 403"
 	else:
-		archivePathLock = archivePath + "." + clientId + clientInfo
-		archive = open(archivePath, 'w')
-		archiveLock = open(archivePathLock, 'w')
+		archive = open(archivePath, 'w+')
 
 		archive.write(content)
 		logging.info(" POST Sucessful")
 		message.status = "OK - 200"
 
 		archive.close()
-		archiveLock.close()
 	message.url = url
 	message.content = content
 	message.signature = communication.hmacFromResponse(message, key)
@@ -148,6 +152,8 @@ def deleteMethod(url, clientId, clientInfo, key):
 	if not os.path.exists(archivePath):
 		os.makedirs("contents")
 
+	archivePath += clientId + clientInfo + "/"
+
 	message = setDefaultServer(message)
 	if url == '/':
 		archivePath += 'index.html'
@@ -161,17 +167,9 @@ def deleteMethod(url, clientId, clientInfo, key):
 	logging.info(" DELETE {0}".format(url))
 
 	if os.path.exists(archivePath):
-		archivePathLock = archivePath + "." + clientId + clientInfo
-
-		if os.path.exists(archivePathLock):
-				os.remove(archivePath)
-				os.remove(archivePathLock)
-				logging.info(" DELETE Sucessful".format(url))
-				message.status = "OK - 200"
-		else:
-			logging.info(" DELETE Unsucessful".format(url))
-			message.status = "FAIL - 403"
-
+		os.remove(archivePath)
+		logging.info(" DELETE Sucessful".format(url))
+		message.status = "OK - 200"
 	else:
 		logging.info(" DELETE Unsucessful".format(url))
 		message.status = "FAIL - 403"

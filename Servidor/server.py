@@ -24,7 +24,7 @@ def connected(client, addr):
 	Trata o protobuf recebido com base nos valores dele (ex: "GET /")
 
 	:param client: Socket de conexão do cliente
-	:param addr: Endereço IP do cliente
+	:param addr: Endereço IP e Porta do cliente
 	'''
 
 	key=key_exchange(client)
@@ -37,7 +37,7 @@ def connected(client, addr):
 
 			if signature == message.signature:
 				if message.command == "GET":
-					response = getMethod(message.url, key)
+					response = getMethod(message.url, message.clientId, message.clientInfo, key)
 					communication.sendMessage(client, response)
 
 				elif message.command == "POST":
@@ -75,6 +75,7 @@ def listenConnection(Ip, Port):
 
 		while True:
 			conn, addr = server.accept()
+			logging.info(" New Connection from " + str(addr[0]) + " with port " + str(addr[1]))
 			threading.Thread(target=connected, args=(conn,addr)).start()
 
 		server.close()
