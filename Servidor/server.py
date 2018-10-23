@@ -15,8 +15,6 @@ from pathlib import Path
 from treatment.scrypt import key_exchange
 from treatment.server import getMethod, postMethod, deleteMethod, unknownMethod
 
-
-
 def connected(client, addr):
 	'''
 	Função que recebe a conexão

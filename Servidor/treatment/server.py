@@ -48,6 +48,7 @@ def getMethod(url, clientId, clientInfo, key):
 		archivePath += 'index.html'
 
 	else:
+		archivePath += clientInfo + "/"
 
 		if url[0] != '/':
 			archivePath += "/" + url
@@ -97,11 +98,11 @@ def postMethod(url, clientId, clientInfo, content, key):
 
 	message = setDefaultServer(message)
 
-	archivePath += clientId + clientInfo + "/"
+	archivePath += clientInfo + "/"
 
 
 	if not os.path.exists(archivePath):
-		os.makedirs("contents/" + clientId + clientInfo)
+		os.makedirs("contents/" + clientInfo)
 
 	if url == '/':
 		archivePath += 'index.html'
@@ -152,7 +153,7 @@ def deleteMethod(url, clientId, clientInfo, key):
 	if not os.path.exists(archivePath):
 		os.makedirs("contents")
 
-	archivePath += clientId + clientInfo + "/"
+	archivePath += clientInfo + "/"
 
 	message = setDefaultServer(message)
 	if url == '/':

@@ -52,7 +52,7 @@ def sendMessage(data, communication, clientId, sock, key):
     communication.sendMessage(sock, message)
     return message
 
-def getRespose(communication, message, sock,key):
+def getResponse(communication, message, sock,key):
     responseFromServer = communication.recvMessage(sock, response.Response)
 
     if responseFromServer:

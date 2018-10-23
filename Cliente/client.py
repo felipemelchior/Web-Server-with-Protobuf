@@ -8,7 +8,7 @@ import request_pb2 as request
 import response_pb2 as response
 import communication
 from treatment.ccrypt import key_exchange
-from treatment.client import getRespose, sendMessage
+from treatment.client import getResponse, sendMessage
 
 def helpMessage():
 	print("\nComandos disponíveis:\n\n\tGET - Recebe um arquivo do Servidor\n\tPOST - Envia um arquivo existente para o Servidor\n\tDELETE - Exclui um arquivo de sua autoria do servidor\n\nPara finalizar o programa, utilize 'SAIR'")
@@ -40,7 +40,7 @@ def createConection(IP, Port):
 
 	while(data != "SAIR"):
 		message = sendMessage(data, communication, clientId, sock, key)
-		getRespose(communication, message, sock, key)
+		getResponse(communication, message, sock, key)
 
 		print("\n######## NOVA REQUISIÇÃO ########")
 		helpMessage()
