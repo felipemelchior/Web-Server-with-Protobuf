@@ -66,11 +66,13 @@ def getResponse(communication, message, sock,key):
                     print(responseFromServer.content)
 
                     if(responseFromServer.url in ["/", ""]):
-                        archive = open("index.html", 'w+')
+                        archive = open("index.html", 'w')
                         archive.write(responseFromServer.content)
+                        archive.close()
                     else:
-                        archive = open(responseFromServer.url, 'w+')
+                        archive = open(responseFromServer.url, 'w')
                         archive.write(responseFromServer.content)
+                        archive.close()
 
                 else:
                     print("Arquivo não encontrado")

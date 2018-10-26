@@ -61,7 +61,7 @@ def getMethod(url, clientId, clientInfo, key):
 
 	try:
 		archive = open(archivePath, 'r')
-		nameFile = archive.name
+		nameFile = archive.name.split('/')[-1]
 		message.content += archive.read()
 		logging.info(" GET Sucessful")
 		message.status = "OK - 200"
