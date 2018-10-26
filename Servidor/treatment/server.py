@@ -162,10 +162,11 @@ def deleteMethod(url, clientId, clientInfo, key):
 		archivePath += 'index.html'
 
 	else:
-		if url[0] == '/':
-			archivePath += str(''.join(url.split('/')))
-		else:
-			archivePath += url
+		# if url[0] == '/':
+		# 	archivePath += str(''.join(url.split('/')))
+		# else:
+		# 	archivePath += url
+		archivePath += str(''.join(url.split('/')[-1]))
 
 	logging.info(" DELETE {0}".format(url))
 
