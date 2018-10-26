@@ -5,7 +5,7 @@
 #   All Rights Reserved
 #   V0.1
 
-import hashlib, socket, sys, random, string, numpy
+import hashlib, socket, sys, random, string
 from Crypto.Cipher import AES
 from Crypto import Random
 from Crypto.Random import random
