@@ -49,7 +49,7 @@ def getMethod(url, clientId, clientInfo, key):
 
 	else:
 		archivePath += clientInfo + "/"
-
+		url = url.split('/')[-1]
 		if url[0] != '/':
 			archivePath += "/" + url
 		else:
@@ -108,10 +108,12 @@ def postMethod(url, clientId, clientInfo, content, key):
 		archivePath += 'index.html'
 
 	else:
-		if url[0] == '/':
-			archivePath += str(''.join(url.split('/')))
-		else:
-			archivePath += url
+		# if url[0] == '/':
+		# 	archivePath += str(''.join(url.split('/')))
+		# else:
+		# 	archivePath += url
+		archivePath += str(''.join(url.split('/')[-1]))
+
 
 	logging.info(" POST {0}".format(url))
 
