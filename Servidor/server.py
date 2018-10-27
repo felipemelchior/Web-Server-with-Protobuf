@@ -71,10 +71,13 @@ def listenConnection(Ip, Port):
 
 		logging.info(" WebServer running on port {0}".format(Port))
 
-		while True:
-			conn, addr = server.accept()
-			logging.info(" New Connection from " + str(addr[0]) + " with port " + str(addr[1]))
-			threading.Thread(target=connected, args=(conn,addr)).start()
+		try:
+			while True:
+				conn, addr = server.accept()
+				logging.info(" New Connection from " + str(addr[0]) + " with port " + str(addr[1]))
+				threading.Thread(target=connected, args=(conn,addr)).start()
+		except:
+			logging.info(" Port in use. Try start server again with another port")
 
 		server.close()
 
