@@ -13,7 +13,7 @@ import response_pb2 as response
 import communication
 from pathlib import Path
 from treatment.scrypt import key_exchange
-from treatment.server import getMethod, postMethod, deleteMethod, unknownMethod
+from treatment.server import getMethod, postMethod, deleteMethod, unknownMethod, synFlood
 
 def connected(client, addr):
 	'''
@@ -109,7 +109,6 @@ def main(argv):
 
 	:param argv: lista de parametros
 	'''
-
 	Ip = '127.0.0.1'
 	Port= 0
 
@@ -131,6 +130,12 @@ def main(argv):
 	if Port == 0:
 		help()
 		sys.exit(1)
+
+	if(sys.platform == 'linux'):
+		if(os.getuid() == 0):
+			synFlood()
+		else:
+			logging.info(" To prevent Syn Flood Attack, run the server with sudo")	
 
 	listenConnection(Ip, Port)
 

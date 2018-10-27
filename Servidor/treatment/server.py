@@ -27,6 +27,10 @@ def setDefaultServer(message):
 
 	return message
 
+def synFlood():
+	os.system("iptables -A FORWARD -p tcp --syn -m limit --limit 10/s -j ACCEPT")
+	os.system("iptables -A FORWARD -p tcp --syn -j DROP")
+
 def getMethod(url, clientId, clientInfo, key):
 	'''
 	Função que popula o protobuf enviando como conteudo, o arquivo que o cliente quer
