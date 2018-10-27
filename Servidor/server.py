@@ -13,7 +13,7 @@ import response_pb2 as response
 import communication
 from pathlib import Path
 from treatment.scrypt import key_exchange
-from treatment.server import getMethod, postMethod, deleteMethod, unknownMethod, synFlood
+from treatment.server import getMethod, postMethod, deleteMethod, unknownMethod, synFlood, clearRules
 
 def connected(client, addr):
 	'''
@@ -77,11 +77,13 @@ def listenConnection(Ip, Port):
 				logging.info(" New Connection from " + str(addr[0]) + " with port " + str(addr[1]))
 				threading.Thread(target=connected, args=(conn,addr)).start()
 		except:
+			clearRules()
 			logging.info(" Port in use. Try start server again with another port")
 
 		server.close()
 
 	except (KeyboardInterrupt, SystemExit):
+		clearRules()
 		logging.info(" Finishing execution of WebServer...")
 		pass
 

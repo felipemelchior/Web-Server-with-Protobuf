@@ -31,6 +31,10 @@ def synFlood():
 	os.system("iptables -A FORWARD -p tcp --syn -m limit --limit 10/s -j ACCEPT")
 	os.system("iptables -A FORWARD -p tcp --syn -j DROP")
 
+def clearRules():
+	os.system("iptables -D FORWARD -p tcp --syn -m limit --limit 10/s -j ACCEPT")
+	os.system("iptables -D FORWARD -p tcp --syn -j DROP")
+
 def getMethod(url, clientId, clientInfo, key):
 	'''
 	Função que popula o protobuf enviando como conteudo, o arquivo que o cliente quer
@@ -179,10 +183,10 @@ def deleteMethod(url, clientId, clientInfo, key):
 
 	if os.path.exists(archivePath):
 		os.remove(archivePath)
-		logging.info(" DELETE Sucessful".format(url))
+		logging.info(" DELETE Sucessful")
 		message.status = "OK - 200"
 	else:
-		logging.info(" DELETE Unsucessful".format(url))
+		logging.info(" DELETE Unsucessful")
 		message.status = "FAIL - 403"
 
 	message.url = url
