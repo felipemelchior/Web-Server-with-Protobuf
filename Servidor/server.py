@@ -85,7 +85,7 @@ def listenConnection(Ip, Port):
 		except:
 			if(os.getuid() == 0):
 				clearRules()
-			logging.info(" Port in use. Try start server again with another port")
+			logging.info(" Ending the server execution")
 
 		server.close()
 

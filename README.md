@@ -44,4 +44,6 @@ Após isso, os códigos irão começar a execução e através do código de cli
 ## Desenvolvedores
 
 * Felipe Homrich Melchior - UNIPAMPA - [Perfil GitHub](https://github.com/homdreen) <br>
+* Guilherme Neri Bustamante Sá - UNIPAMPA - [Perfil GitHub](https://github.com/161150744) <br>
+* Lucas Antunes - UNIPAMPA - [Perfil GitHub](https://github.com/LucasAntunesdeAlmeida) <br>
 * Wesley Ferreira - UNIPAMPA - [Perfil GitHub](https://github.com/wesferr) <br>
