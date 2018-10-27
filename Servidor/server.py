@@ -77,13 +77,15 @@ def listenConnection(Ip, Port):
 				logging.info(" New Connection from " + str(addr[0]) + " with port " + str(addr[1]))
 				threading.Thread(target=connected, args=(conn,addr)).start()
 		except:
-			clearRules()
+			if(os.getuid() == 0):
+				clearRules()
 			logging.info(" Port in use. Try start server again with another port")
 
 		server.close()
 
 	except (KeyboardInterrupt, SystemExit):
-		clearRules()
+		if(os.getuid() == 0):
+			clearRules()
 		logging.info(" Finishing execution of WebServer...")
 		pass
 
