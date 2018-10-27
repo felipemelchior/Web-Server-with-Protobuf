@@ -33,18 +33,22 @@ def createConection(IP, Port):
 		print("Conexão Recusada")
 		exit(1)
 
-	helpMessage()
-	data = input("\nComando => ").upper()
-	clientId = str(random.randint(1000,9999))
-	key=key_exchange(sock)
-
-	while(data != "SAIR"):
-		message = sendMessage(data, communication, clientId, sock, key)
-		getResponse(communication, message, sock, key)
-
-		print("\n######## NOVA REQUISIÇÃO ########")
+	try:
 		helpMessage()
 		data = input("\nComando => ").upper()
+		clientId = str(random.randint(1000,9999))
+		key=key_exchange(sock)
+
+		while(data != "SAIR"):
+			message = sendMessage(data, communication, clientId, sock, key)
+			getResponse(communication, message, sock, key)
+
+			print("\n######## NOVA REQUISIÇÃO ########")
+			helpMessage()
+			data = input("\nComando => ").upper()
+	except KeyboardInterrupt:
+		sock.close()
+		print("\n\nFinalizando a conexão")
 
 def help():
 	'''

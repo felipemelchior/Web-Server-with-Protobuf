@@ -70,6 +70,9 @@ def getMethod(url, clientId, clientInfo, key):
 	except FileNotFoundError:
 		message.status = "FAIL - 404"
 		logging.info(" Archive not found")
+	except OSError:
+		message.status = "FAIL - 403"
+		logging.info(" Error on archive")
 
 	message.signature = communication.hmacFromResponse(message, key)
 
