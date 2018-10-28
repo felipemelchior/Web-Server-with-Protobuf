@@ -1,9 +1,13 @@
-import os, sys, getopt
-import socket
+import getopt
+import os
 import random
+import socket
+import sys
+
+import communication
 import request_pb2 as request
 import response_pb2 as response
-import communication
+
 
 def setDefaultClient(message):
 	'''
@@ -65,12 +69,15 @@ def getResponse(communication, message, sock,key):
                     print("CONTEUDO:")
                     print(responseFromServer.content)
 
+                    if not os.path.exists("contents"):
+                        os.makedirs("contents")
+
                     if(responseFromServer.url in ["/", ""]):
-                        archive = open("index.html", 'w')
+                        archive = open("./contents/index.html", 'w')
                         archive.write(responseFromServer.content)
                         archive.close()
                     else:
-                        archive = open(responseFromServer.url, 'w')
+                        archive = open("./contents/{}".format(responseFromServer.url.split('/')[-1]), 'w')
                         archive.write(responseFromServer.content)
                         archive.close()
 
