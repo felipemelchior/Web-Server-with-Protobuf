@@ -1,10 +1,11 @@
+#!/bin/bash
 echo "GERANDO ARQUIVOS DE TESTE"
 
-# dd if=/dev/urandom bs=1k count=10 | split -a 2 -b 1k - t.
-# dd if=/dev/urandom bs=100k count=10 | split -a 3 -b 100k - t.
-# dd if=/dev/urandom bs=1M count=10 iflag=fullblock | split -a 4 -b 1M - t.
-# dd if=/dev/urandom bs=100M count=10 iflag=fullblock | split -a 5 -b 100M - t.
-# dd if=/dev/urandom bs=1G count=3 iflag=fullblock | split -a 6 -b 1G - t.
+dd if=/dev/urandom bs=1k count=10 | split -a 2 -b 1k - t.
+dd if=/dev/urandom bs=100k count=10 | split -a 3 -b 100k - t.
+dd if=/dev/urandom bs=1M count=10 iflag=fullblock | split -a 4 -b 1M - t.
+dd if=/dev/urandom bs=100M count=10 iflag=fullblock | split -a 5 -b 100M - t.
+dd if=/dev/urandom bs=1G count=3 iflag=fullblock | split -a 6 -b 1G - t.
 
 name1k=("t.aa" "t.ab" "t.ac" "t.ad" "t.ae" "t.af" "t.ag" "t.ah" "t.ai" "t.aj")
 name100k=("t.aaa" "t.aab" "t.aac" "t.aad" "t.aae" "t.aaf" "t.aag" "t.aah" "t.aai" "t.aaj")
