@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "SERVIDOR ONLINE"
 sudo python3 ../Servidor/server.py -i localhost -p 80&
 

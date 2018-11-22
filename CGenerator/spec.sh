@@ -1,4 +1,4 @@
-
+#!/bin/bash
 echo "------CPU:------" >> specs.txt
 sudo lscpu >> specs.txt
 echo "">> specs.txt
